@@ -1,42 +1,35 @@
 object Form1: TForm1
   Left = 192
   Top = 130
-  Width = 928
-  Height = 480
+  Width = 309
+  Height = 167
   Caption = 'Form1'
   Color = clBtnFace
-  Font.Charset = DEFAULT_CHARSET
+  Font.Charset = GB2312_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Height = -15
+  Font.Name = #26032#23435#20307
   Font.Style = []
   OldCreateOrder = False
+  Position = poDesktopCenter
   PixelsPerInch = 96
-  TextHeight = 13
-  object pnl1: TPanel
-    Left = 192
-    Top = 104
-    Width = 537
-    Height = 233
-    Caption = 'pnl1'
-    TabOrder = 0
-  end
+  TextHeight = 15
   object btn1: TButton
-    Left = 320
-    Top = 24
-    Width = 75
+    Left = 16
+    Top = 16
+    Width = 169
     Height = 25
-    Caption = 'btn1'
-    TabOrder = 1
+    Caption = '1 - '#25171#24320#35774#35745#31383#20307
+    TabOrder = 0
     OnClick = btn1Click
   end
   object btn2: TButton
-    Left = 432
-    Top = 24
-    Width = 75
+    Left = 16
+    Top = 48
+    Width = 169
     Height = 25
-    Caption = 'btn2'
-    TabOrder = 2
+    Caption = '2 - '#24320#22987#35774#35745#27169#24335
+    TabOrder = 1
     OnClick = btn2Click
   end
 end

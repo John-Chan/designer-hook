@@ -18,8 +18,8 @@ namespace rdc
     {
     public:
     
-        static void  BeginDesign(TCustomForm* Form);
-        static void  BeginDesign(TCustomForm* Form, TWinControl* Root);
+        static DesignerHook*  BeginDesign(TCustomForm* Form);
+        static DesignerHook*  BeginDesign(TCustomForm* Form, TWinControl* Root);
     public:
         /*
         virtual HResult __stdcall QueryInterface(const _GUID& guid,void**);

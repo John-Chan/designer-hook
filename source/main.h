@@ -12,7 +12,6 @@
 class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
-    TPanel *pnl1;
     TButton *btn1;
     TButton *btn2;
     void __fastcall btn1Click(TObject *Sender);

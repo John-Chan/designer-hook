@@ -125,7 +125,7 @@ void    GrabHandle::Pos()
     case fdRightDown:  
         Cursor = crSizeNWSE;
         SetBounds(angle_135.x, angle_135.y, GrabHandleSize, GrabHandleSize);
-        SetBounds(X[2], Y[2], GrabHandleSize, GrabHandleSize);
+        //SetBounds(X[2], Y[2], GrabHandleSize, GrabHandleSize);
         break;
     case fdDown: 
         Cursor = crSizeNS;

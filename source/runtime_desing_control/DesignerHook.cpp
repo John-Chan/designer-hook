@@ -269,26 +269,11 @@ void    DesignerHook::Clear()
 }
 TControl*   DesignerHook::Add(TControl* Ctrol)
 {
-    /*
-var
-  D                 : TGrabHandleDirect;
-  FrameSize         : TGrabHandle;
-begin
-  Result := AControl;
-  FControls.Add(AControl);
-  for D := fdLeftUp to fdLeft do
-  begin
-    FrameSize := TGrabHandle.Create(FGrabHandleManager, AControl, D);
-  end;
-  */
+
     //GrabHandleDirect    GrabDirect;
     GrabHandle*         GrabFrame;
     Controls_->Add(Ctrol);
-    /*
-    for(GrabDirect = fdLeftUp;GrabDirect<=fdLeft ;++GrabDirect){
-        GrabFrame= new  GrabHandle(GrabHandleManager_,Ctrol,GrabDirect);
-    }
-    */
+
     GrabFrame= new  GrabHandle(GrabHandleManager_,Ctrol,fdLeftUp);
     GrabFrame= new  GrabHandle(GrabHandleManager_,Ctrol,fdUp);
     GrabFrame= new  GrabHandle(GrabHandleManager_,Ctrol,fdRightUp);
@@ -303,20 +288,6 @@ begin
 
 void        DesignerHook::AddRectControls(TWinControl* Parent,TRect Rect)
 {
-    /*
-    var
-      I                 : Integer;
-    begin
-      Clear();
-      for I := 0 to Parent.ControlCount - 1 do
-        if InRect(Rect, Parent.Controls[I].BoundsRect) and
-          OwnerCheck(Parent.Controls[I], FRoot) then
-        begin
-          Add(Parent.Controls[I]);
-        end;
-
-    end;
-    */
     Clear();
     for(int i=0; i<Parent->ControlCount - 1 ;++i ){
         if( InRect(Rect, Parent->Controls[i]->BoundsRect) && OwnerCheck(Parent->Controls[i], Root_)){
@@ -606,11 +577,11 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
 }
 
 
-void  DesignerHook::BeginDesign(TCustomForm* Form)
+DesignerHook*  DesignerHook::BeginDesign(TCustomForm* Form)
 {
-    BeginDesign(Form,Form);
+    return BeginDesign(Form,Form);
 }
-void  DesignerHook::BeginDesign(TCustomForm* Form, TWinControl* Root)
+DesignerHook*  DesignerHook::BeginDesign(TCustomForm* Form, TWinControl* Root)
 {
     DesignerHook* p_designer=new DesignerHook();
     p_designer->Form_= Form;
@@ -620,6 +591,7 @@ void  DesignerHook::BeginDesign(TCustomForm* Form, TWinControl* Root)
     Form->Designer=di_hook;
     (ForceCast<CrackComponent*,void*>(Form))->CallSetDesigning(true, false);
     (ForceCast<CrackComponent*,void*>(Root))->CallSetDesigning(true, true);
+    return p_designer;
 }
 
 }//namespace
