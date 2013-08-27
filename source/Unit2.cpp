@@ -12,6 +12,8 @@ TForm2 *Form2;
 __fastcall TForm2::TForm2(TComponent* Owner)
     : TForm(Owner)
 {
+    //edt1->DoubleBuffered=true ;
+    //this->DoubleBuffered=true ;
 }
 //---------------------------------------------------------------------------
  

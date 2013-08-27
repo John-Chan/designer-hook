@@ -6,6 +6,8 @@ namespace rdc
 {
     const TColor kGrabHandleColorActive =clRed;   
     const TColor kGrabHandleColorMutiSelect =clLime;
-    const TColor kGrabHandleColorNormal =clAppWorkSpace;
+    const TColor kGrabHandleColorNormal = clBlack;//clAppWorkSpace;
+
+    static const int kGrabHandleSize=4;
 }//namespace
 #endif

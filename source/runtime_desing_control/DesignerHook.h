@@ -12,50 +12,22 @@
 
 namespace rdc
 {
-    
-    //class DesignerHook : public TInterfacedObject, /*IDesignerNotify, IDesignerHook  */  _di_IDesignerHook
-    class DesignerHook : public TInterfacedObject, /*IDesignerNotify,  */ IDesignerHook  
+    class DesignerHook : public TInterfacedObject, /*IDesignerNotify,  */ IDesignerHook
     {
-    public:
-    
+    public: // 辅助函数
         static DesignerHook*  BeginDesign(TCustomForm* Form);
-        static DesignerHook*  BeginDesign(TCustomForm* Form, TWinControl* Root);
-    public:
-        /*
-        virtual HResult __stdcall QueryInterface(const _GUID& guid,void**);
-        virtual int __stdcall AddRef(void);
-        virtual int __stdcall Release(void);
-        */
+        static DesignerHook*  BeginDesign(TCustomForm* Form, TWinControl* Root); 
+        //static void           EndDesign(TCustomForm* Form);
+        static void           EndDesign(DesignerHook* hooker);
+    public: // IUnknown的接口
         virtual ULONG __stdcall AddRef(void);
         virtual ULONG __stdcall Release(void);
         virtual HRESULT __stdcall QueryInterface(const GUID &IID, void **ppv);
-        /*
-    public
-    { IDesignerNotify 的接口}
-    procedure Modified;
-    procedure Notification(AnObject: TPersistent; Operation: TOperation);
-      */
+
     public: // IDesignerNotify 的接口
         virtual void __fastcall Modified(void) ;
         virtual void __fastcall Notification(TPersistent* AnObject, TOperation Operation) ;
-    /*
-  public
-    { IDesignerHook 的接口}
-    function GetCustomForm: TCustomForm;
-    procedure SetCustomForm(Value: TCustomForm);
-    function GetIsControl: Boolean;
-    procedure SetIsControl(Value: Boolean);
-    function IsDesignMsg(Sender: TControl; var Message: TMessage): Boolean;
-    procedure PaintGrid;
-    procedure PaintMenu;
-    procedure ValidateRename(AComponent: TComponent;
-      const CurName, NewName: string);
-    function UniqueName(const BaseName: string): string;
-    function GetRoot: TComponent;
 
-    property IsControl: Boolean read GetIsControl write SetIsControl;
-    property Form: TCustomForm read GetCustomForm write SetCustomForm;
-    */
     public: //IDesignerHook 的接口
         virtual TCustomForm* __fastcall GetCustomForm(void) ;
         virtual void __fastcall SetCustomForm(TCustomForm* Form) ;
@@ -69,44 +41,15 @@ namespace rdc
         __property TCustomForm* Form = {read=GetCustomForm, write=SetCustomForm};
 
     public:
-        /*    
-        constructor Create();
-        destructor Destroy; override;
-        __property Dragging: Boolean read FDragging write SetDragging;
-        __property ControlCount: Integer read GetControlCount;
-        __property Controls[int Index]: TControl read GetControls;
-       */
        virtual __fastcall DesignerHook();
        virtual __fastcall ~DesignerHook();
         __property bool Dragging  = {read=Dragging_, write=SetDragging};
         __property int ControlCount = {read=GetControlCount, nodefault};
         __property TControl* Controls[int Index] = {read=GetControls};
+        //鼠标移动时,是不是显示边框
+        void        ShowGrabWhenMove(bool b);  
+        void        Clear();
     private:
-        /*
-        procedure MouseLock(Sender: TControl);//锁定鼠标到某一个范围
-        procedure MouseFree();//释放对鼠标的锁定
-
-        function OnMessage(Sender: TControl; var Message: TMessage): Boolean;
-        procedure Remove(AControl: TControl); overload;
-        procedure Remove(Index: Integer); overload;
-        procedure Clear();
-        function Add(AControl: TControl): TControl;
-        procedure ShowGrabHandle(const Show: boolean);
-        procedure ClearGrabHandle(AControl: TControl);
-        procedure SetDragging(const Value: Boolean);
-        function GetControlCount: Integer;
-        function GetControls(Index: Integer): TControl;
-        procedure AddRectControls(Parent: TWinControl; Rect: TRect);
-        function OwnerCheck(Sender: TControl; CheckOnwer: TComponent): Boolean;
-
-        procedure MouseDown(Sender: TControl; Button: TMouseButton; Shift: TShiftState; X: Integer;
-          Y: Integer); virtual;
-        procedure MouseUp(Sender: TControl; Button: TMouseButton; Shift: TShiftState; X: Integer;
-          Y: Integer); virtual;
-        procedure MouseMove(Sender: TControl; Shift: TShiftState; X: Integer; Y: Integer); virtual;
-        procedure KeyDown(Sender: TControl; var Key: Word; Shift: TShiftState); virtual;
- 
-        */
         //锁定鼠标到某一个范围
         void    MouseLock(TControl* Sender);
         //释放对鼠标的锁定
@@ -117,7 +60,6 @@ namespace rdc
         void    Remove(TControl* ctl);
         void    Remove(int Index);
 
-        void    Clear();
         TControl*   Add(TControl* Ctrol);
         void    ShowGrabHandle(const bool b);
         void    ClearGrabHandle(TControl* Ctrol);
@@ -150,33 +92,9 @@ namespace rdc
         TRect  OldRect_;
         TRect  NewRect_;
         TRect  MouseRect_;//鼠标被限制的范围
+        bool   ShowGrabWhenMove_;
 
-
-        /*
-        FGrabHandleManager: TGrabHandleManager;
-        FForm: TCustomForm;
-        FRoot: TWinControl;
-        FControls: TList;
-        FDraggingControl: TControl;
-        FDragging: Boolean;
-        FBeforDragPos: TPoint;
-
-        FSelecting: Boolean;
-        FPointStart, FPointEnd: TPoint;
-        FOldRect: TRect;
-        FNewRect: TRect;   
-        FMouseRect: TRect;//鼠标被限制的范围
-        */
     };
-
-    /*
-    //开始设计.设计整个窗口里,以窗口为Owner的控件
-    function BeginDesign(Form: TCustomForm): IDesignerHook; overload;
-    //开始设计.设计窗口里,Root控件为Owner的控件
-    function BeginDesign(Form: TCustomForm; Root: TWinControl): IDesignerHook; overload;
-    //终止设计
-    procedure EndDesign(Form : TCustomForm);
-    */
 }
 
 #endif

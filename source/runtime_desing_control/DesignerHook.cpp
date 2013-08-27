@@ -15,6 +15,11 @@
 
 namespace rdc
 {
+/************************************************************************
+//  IUnknown的接口
+//  --------------------------------------------------------------------
+//
+************************************************************************/
 ULONG __stdcall DesignerHook::AddRef(void)
 {
     return ++this->FRefCount;
@@ -29,21 +34,6 @@ HRESULT __stdcall DesignerHook::QueryInterface(const GUID &IID, void **ppv)
     return DISP_E_UNKNOWNINTERFACE;//S_OK; E_NoInterface;
 }
 
-/*
-int __stdcall DesignerHook::Release(void)
-{
-    //
-}
-int __stdcall DesignerHook::AddRef(void)
-{
-    //
-}
-
-HResult __stdcall QueryInterface(const _GUID& guid,void**)
-{
-    //
-}
-*/
 
 /************************************************************************
 //  IDesignerNotify 的接口
@@ -150,7 +140,8 @@ PointStart_(),
 PointEnd_(),
 OldRect_(),
 NewRect_(),
-MouseRect_()
+MouseRect_(),
+ShowGrabWhenMove_(false)
 {
     GrabHandleManager_=new GrabHandleManager(this);
 }
@@ -162,7 +153,10 @@ __fastcall DesignerHook::~DesignerHook()
     delete Controls_;
 
 }
-
+void        DesignerHook::ShowGrabWhenMove(bool b)
+{
+    ShowGrabWhenMove_=b;
+}
 bool        DesignerHook::DirectShowable(GrabHandleDirect drect)
 {
     if(drect == fdLeftUp || drect == fdLeftDown ||drect == fdRightUp ||drect == fdRightDown  )
@@ -195,9 +189,7 @@ void    DesignerHook::MouseLock(TControl* Sender)
     PtBottomRight =  Sender->Parent->ClientToScreen(PtBottomRight);
     Rect.bottom= PtBottomRight.y;
     Rect.right= PtBottomRight.x;
-    
-    //Rect.TopLeft = Sender->Parent->ClientToScreen(Rect.TopLeft);
-    //Rect.BottomRight := Sender->Parent->ClientToScreen(Rect.BottomRight);
+
     ClipCursor(&Rect); //把鼠标锁定在固定区?
 }
 //释放对鼠标的锁定
@@ -209,8 +201,6 @@ void    DesignerHook::MouseFree()
 
 bool    DesignerHook::OnMessage(TControl* Sender,Messages::TMessage &Message)
 {
-    //int  CtrlIndex=0;i=0;   
-    // ( (Message.Msg >= WM_MOUSEFIRST) && (Message.Msg <= WM_MOUSELAST)) || ((Message.Msg >= WM_KEYFIRST) && (Message.Msg <= WM_KEYLAST));
     bool msg_handled=(IsMouseMsg(Message.Msg) || IsKeyMsg(Message.Msg));
     TWMMouse& WMMouse=(TWMMouse&)Message;
     TWMKey&   WMKey=(TWMKey&)Message;
@@ -276,8 +266,6 @@ void    DesignerHook::Clear()
 }
 TControl*   DesignerHook::Add(TControl* Ctrol)
 {
-
-    //GrabHandleDirect    GrabDirect;
     GrabHandle*         GrabFrame;
     Controls_->Add(Ctrol);
 
@@ -325,9 +313,17 @@ void    DesignerHook::ShowGrabHandle(const bool b)
 void    DesignerHook::ClearGrabHandle(TControl* Ctrol)
 {
     for(int i=GrabHandleManager_->ComponentCount - 1;i>=0;--i){
+        TComponent* p_component= GrabHandleManager_->Components[i];
+        if( CheckPtrType<GrabHandle*>(p_component) ){
+            GrabHandle* p=DownCast<GrabHandle*,TComponent*>(p_component);
+            if( p && p->Control_ == Ctrol)
+                delete  p;
+        }
+        /*
         GrabHandle* p=DownCast<GrabHandle*,TComponent*>(GrabHandleManager_->Components[i]);// dynamic_cast<GrabHandle>(GrabHandleManager_->Components[i]);
         if( p && p->Control_ == Ctrol)
             delete  p;
+        */
     }
 }
 void    DesignerHook::SetDragging(const bool b)
@@ -371,7 +367,8 @@ void __fastcall DesignerHook::MouseDown(TControl* Sender,TMouseButton Button, Cl
         }
         if(CtrlIndex == -1){
             Add(Sender);
-            Dragging_=false;
+            SetDragging(false);
+            //Dragging_=false;
         }else{
             Remove(Sender);
             ShowGrabHandle(true);
@@ -405,8 +402,8 @@ void __fastcall DesignerHook::MouseDown(TControl* Sender,TMouseButton Button, Cl
                 Clear();
                 Add(Sender);
             }
-
-            Dragging_ = true;
+            SetDragging(true);
+            //Dragging_ = true;
             DraggingControl_ = Sender;
             MouseLock(Sender);
             BeforDragPos_ = Sender->ClientToScreen(Point(X, Y));
@@ -418,7 +415,8 @@ void __fastcall DesignerHook::MouseUp(TControl* Sender,TMouseButton Button, Clas
     HDC dc;
     if(Dragging_){
         MouseFree();
-        Dragging_ = false;
+        SetDragging(false);
+        //Dragging_ = false;
     }
     if(Selecting_){
         dc= GetDC(0);
@@ -440,9 +438,6 @@ void __fastcall DesignerHook::MouseUp(TControl* Sender,TMouseButton Button, Clas
             OldRect_.bottom= PtBottomRight.y;
             OldRect_.right= PtBottomRight.x;
     
-            //OldRect_.TopLeft = Sender->ScreenToClient(OldRect_.TopLeft);
-            //OldRect_.BottomRight = Sender->ScreenToClient(OldRect_.BottomRight);
-
             OldRect_ = PointToRect(PtTopLeft, PtBottomRight);
             AddRectControls(DownCast<TWinControl*,TControl*>(Sender), OldRect_);
             ShowGrabHandle(true);
@@ -465,9 +460,10 @@ void __fastcall DesignerHook::MouseMove(TControl* Sender,Classes::TShiftState Sh
             }else{
                 Remove(i);
             }
-            BeforDragPos_ = pos;
-        }
-        ShowGrabHandle(true);
+        }  
+        BeforDragPos_ = pos;
+        if(ShowGrabWhenMove_)
+            ShowGrabHandle(true);
     }else{
         if(Selecting_){
             PointEnd_ = Sender->ClientToScreen(Point(X, Y));
@@ -483,11 +479,11 @@ void __fastcall DesignerHook::MouseMove(TControl* Sender,Classes::TShiftState Sh
 
 void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShiftState Shift)
 {
-    int i=0;
+
     if(0== ControlCount ||(!Shift.Contains(ssShift) && !Shift.Contains(ssCtrl)) ||(VK_CONTROL==Key || VK_SHIFT == Key) ) {
-            return;
+        return;
     }
-    if(GetControlCount() == 0 && Controls[0] == Form_){
+    if(GetControlCount() == 1 && Controls[0] == Form_){
         return;
     }
     if(Shift.Contains(ssCtrl)){
@@ -495,7 +491,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_UP:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<=GetControlCount() -1 ;++i){
+                for(int index=0;index<=GetControlCount() -1 ;++index){
                     Controls[index]->Top= Controls[index]->Top -1;
                 }
             }__finally{
@@ -505,7 +501,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_DOWN:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<=GetControlCount() -1 ;++i){
+                for(int index=0;index<=GetControlCount() -1 ;++index){
                     Controls[index]->Top= Controls[index]->Top +1;
                 }
             }__finally{
@@ -515,7 +511,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_LEFT:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<=GetControlCount() -1 ;++i){
+                for(int index=0;index<=GetControlCount() -1 ;++index){
                     Controls[index]->Left= Controls[index]->Left -1;
                 }
             }__finally{
@@ -525,7 +521,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_RIGHT:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<=GetControlCount() -1 ;++i){
+                for(int index=0;index<=GetControlCount() -1 ;++index){
                     Controls[index]->Left= Controls[index]->Left +1;
                 }
             }__finally{
@@ -538,7 +534,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_UP:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<=GetControlCount() -1 ;++i){
+                for(int index=0;index<=GetControlCount() -1 ;++index){
                     if(Controls[index]->Height - 1 > 1)
                         Controls[index]->Height= Controls[index]->Height -1;
                 }
@@ -549,7 +545,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_DOWN:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<=GetControlCount() -1 ;++i){
+                for(int index=0;index<=GetControlCount() -1 ;++index){
                     if(Controls[index]->Height + 1 > 1)
                         Controls[index]->Height= Controls[index]->Height + 1;
                 }
@@ -560,7 +556,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_LEFT:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<=GetControlCount() -1 ;++i){
+                for(int index=0;index<=GetControlCount() -1 ;++index){
                     if(Controls[index]->Width - 1 > 1)
                         Controls[index]->Width= Controls[index]->Width -1;
                 }
@@ -571,7 +567,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_RIGHT:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<=GetControlCount() -1 ;++i){
+                for(int index=0;index<=GetControlCount() -1 ;++index){
                     if(Controls[index]->Width + 1 > 1)
                         Controls[index]->Width= Controls[index]->Width +1;
                 }
@@ -600,5 +596,20 @@ DesignerHook*  DesignerHook::BeginDesign(TCustomForm* Form, TWinControl* Root)
     (ForceCast<CrackComponent*,void*>(Root))->CallSetDesigning(true, true);
     return p_designer;
 }
-
+void   DesignerHook::EndDesign(DesignerHook* hooker)
+{
+    TCustomForm* Form  = hooker->Form; 
+    (ForceCast<CrackComponent*,void*>(Form))->CallSetDesigning(false, true);
+    Form->Designer=NULL;
+    delete  hooker;
+}
+/*
+void  DesignerHook::EndDesign(TCustomForm* Form)
+{
+    //TCrackComponent(Form).SetDesigning(False, True);
+    //Form.Designer := nil;
+    (ForceCast<CrackComponent*,void*>(Form))->CallSetDesigning(false, true);
+    Form->Designer=NULL;
+}
+*/
 }//namespace

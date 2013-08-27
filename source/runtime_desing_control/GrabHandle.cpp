@@ -37,7 +37,7 @@ DesignerHook*  GrabHandleManager::GetDesigner()
 //  --------------------------------------------------------------------
 //
 ************************************************************************/
-static const int GrabHandleSize=8;
+
 
 __fastcall GrabHandle::GrabHandle(/*TComponent* GrabManager*/GrabHandleManager* GrabManager, TControl* Control,GrabHandleDirect Direct)
 :TCustomControl(GrabManager),
@@ -49,7 +49,7 @@ Direct_(Direct)//,FDesigner()
     this->Visible=false ;
     this->Parent= Control_->Parent;
     Color= kGrabHandleColorNormal;
-    //Pos();
+    Pos();
 }
 __fastcall GrabHandle::~GrabHandle()
 {
@@ -58,14 +58,15 @@ __fastcall GrabHandle::~GrabHandle()
 
 void    GrabHandle::Pos()
 {
+    /*
     TPoint  angle_0,angle_45,angle_90,angle_135,angle_180,angle_225,angle_270,angle_315;
-    int x0= Control_->Left - GrabHandleSize / 2;
-    int x1= Control_->Left + (Control_->Width - GrabHandleSize) / 2;
-    int x2= Control_->Left + Control_->Width - GrabHandleSize / 2;
+    int x0= Control_->Left - kGrabHandleSize / 2;
+    int x1= Control_->Left + (Control_->Width - kGrabHandleSize) / 2;
+    int x2= Control_->Left + Control_->Width - kGrabHandleSize / 2;
 
-    int y0=Control_->Top - GrabHandleSize / 2;;
-    int y1=Control_->Top + (Control_->Height - GrabHandleSize) / 2;;
-    int y2=Control_->Top + Control_->Height - GrabHandleSize / 2;
+    int y0=Control_->Top - kGrabHandleSize / 2;;
+    int y1=Control_->Top + (Control_->Height - kGrabHandleSize) / 2;;
+    int y2=Control_->Top + Control_->Height - kGrabHandleSize / 2;
     
     angle_0.x= x1;
     angle_0.y= y0;
@@ -90,58 +91,59 @@ void    GrabHandle::Pos()
 
     angle_315.x= x0;
     angle_315.y= y0;
+    */
     ///*
     
     int X[3];
     int Y[3];
-    X[0] = Control_->Left - GrabHandleSize / 2;
-    X[1] = Control_->Left + (Control_->Width - GrabHandleSize) / 2;
-    X[2] = Control_->Left + Control_->Width - GrabHandleSize / 2;
-    Y[0] = Control_->Top - GrabHandleSize / 2;
-    Y[1] = Control_->Top + (Control_->Height - GrabHandleSize) / 2;
-    Y[2] = Control_->Top + Control_->Height - GrabHandleSize / 2;
+    X[0] = Control_->Left - kGrabHandleSize / 2;
+    X[1] = Control_->Left + (Control_->Width - kGrabHandleSize) / 2;
+    X[2] = Control_->Left + Control_->Width - kGrabHandleSize / 2;
+    Y[0] = Control_->Top - kGrabHandleSize / 2;
+    Y[1] = Control_->Top + (Control_->Height - kGrabHandleSize) / 2;
+    Y[2] = Control_->Top + Control_->Height - kGrabHandleSize / 2;
     //*/
     switch(Direct_)
     {
     case fdLeftUp: 
         Cursor = crSizeNWSE;
-        //SetBounds(angle_315.x, angle_315.y, GrabHandleSize, GrabHandleSize);
-        SetBounds(X[0], Y[0], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_315.x, angle_315.y, kGrabHandleSize, kGrabHandleSize);
+        SetBounds(X[0], Y[0], kGrabHandleSize, kGrabHandleSize);
         break;
     case fdUp:  
         Cursor = crSizeNS;  
-        //SetBounds(angle_0.x, angle_0.y, GrabHandleSize, GrabHandleSize);
-        SetBounds(X[1], Y[0], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_0.x, angle_0.y, kGrabHandleSize, kGrabHandleSize);
+        SetBounds(X[1], Y[0], kGrabHandleSize, kGrabHandleSize);
         break;
     case fdRightUp: 
         Cursor = crSizeNESW;
-        //SetBounds(angle_45.x, angle_45.y, GrabHandleSize, GrabHandleSize);
-        SetBounds(X[2], Y[0], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_45.x, angle_45.y, kGrabHandleSize, kGrabHandleSize);
+        SetBounds(X[2], Y[0], kGrabHandleSize, kGrabHandleSize);
         break;
     case fdRight: 
         Cursor = crSizeWE;     
-        //SetBounds(angle_90.x, angle_90.y, GrabHandleSize, GrabHandleSize);
-        SetBounds(X[2], Y[1], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_90.x, angle_90.y, kGrabHandleSize, kGrabHandleSize);
+        SetBounds(X[2], Y[1], kGrabHandleSize, kGrabHandleSize);
         break;
     case fdRightDown:  
         Cursor = crSizeNWSE;
-        //SetBounds(angle_135.x, angle_135.y, GrabHandleSize, GrabHandleSize);
-        SetBounds(X[2], Y[2], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_135.x, angle_135.y, kGrabHandleSize, kGrabHandleSize);
+        SetBounds(X[2], Y[2], kGrabHandleSize, kGrabHandleSize);
         break;
     case fdDown: 
         Cursor = crSizeNS;
-        //SetBounds(angle_180.x, angle_180.y, GrabHandleSize, GrabHandleSize);
-        SetBounds(X[1], Y[2], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_180.x, angle_180.y, kGrabHandleSize, kGrabHandleSize);
+        SetBounds(X[1], Y[2], kGrabHandleSize, kGrabHandleSize);
         break;
     case fdLeftDown: 
         Cursor = crSizeNESW;   
-        //SetBounds(angle_225.x, angle_225.y, GrabHandleSize, GrabHandleSize);
-        SetBounds(X[0], Y[2], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_225.x, angle_225.y, kGrabHandleSize, kGrabHandleSize);
+        SetBounds(X[0], Y[2], kGrabHandleSize, kGrabHandleSize);
         break;
     case fdLeft:
         Cursor = crSizeWE;
-        //SetBounds(angle_270.x, angle_270.y, GrabHandleSize, GrabHandleSize);
-        SetBounds(X[0], Y[1], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_270.x, angle_270.y, kGrabHandleSize, kGrabHandleSize);
+        SetBounds(X[0], Y[1], kGrabHandleSize, kGrabHandleSize);
         break;
     } 
     if (GrabManager_->GetDesigner()->ControlCount > 1){
@@ -165,29 +167,14 @@ void    __fastcall GrabHandle::MouseDown(TMouseButton Button, Classes::TShiftSta
     GetDesigner()->Dragging=true;
     GetDesigner()->BeforDragPos_ = ClientToScreen(Point(X, Y));
     MouseCapture = true;
-    /*
-    inherited MouseDown(Button, Shift, X, Y);
-  if GetDesigner()->ControlCount > 1 then
-    Exit;
-  GetDesigner()->Dragging := True;
-  GetDesigner()->FBeforDragPos := ClientToScreen(Point(X, Y));
-  MouseCapture := True;
-  
-  */
   
 }
 void    __fastcall GrabHandle::MouseUp(TMouseButton Button, Classes::TShiftState Shift, int X, int Y)
 {
-    //TCustomControl* pSuper= dynamic_cast<TCustomControl>(this);
-    //pSuper->MouseUp(Button,Shift, X, Y);
     TCustomControl::MouseUp(Button,Shift, X, Y);
 
     GetDesigner()->Dragging=false;
-    /*
-    inherited MouseUp(Button, Shift, X, Y);
-    MouseCapture := False;
-    GetDesigner()->Dragging := False;
-    */
+
 }
 void    __fastcall GrabHandle::MouseMove( Classes::TShiftState Shift, int X, int Y)
 {
@@ -195,8 +182,6 @@ void    __fastcall GrabHandle::MouseMove( Classes::TShiftState Shift, int X, int
     TPoint  cPos;
     int     cX,cY;
 
-    //TCustomControl* pSuper= dynamic_cast<TCustomControl>(this);
-    //pSuper->MouseMove(Shift, X, Y);
     TCustomControl::MouseMove(Shift, X, Y);
 
     if(!GetDesigner()->Dragging){

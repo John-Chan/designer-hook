@@ -1,6 +1,6 @@
 object Form2: TForm2
-  Left = 760
-  Top = 331
+  Left = 242
+  Top = 172
   Width = 873
   Height = 487
   Caption = 'Form2'
@@ -33,7 +33,9 @@ object Form2: TForm2
     Left = 160
     Top = 168
     Width = 121
-    Height = 21
+    Height = 19
+    Ctl3D = False
+    ParentCtl3D = False
     TabOrder = 1
     Text = 'edt1'
   end

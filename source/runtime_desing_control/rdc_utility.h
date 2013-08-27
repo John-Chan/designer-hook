@@ -30,11 +30,9 @@ namespace rdc
     {
     public:
         friend class DesignerHook;
+        // 非派生类通过CallSetDesigning 来调用 SetDesigning
         void   CallSetDesigning(bool Value, bool SetChildren);
-        //void    SetDesigning(bool Value, bool SetChildren);
     private:
-        //virtual CrackComponent(TComponent* Owner);
-        //virtual ~CrackComponent();
     };
           
     /************************************************************************
@@ -45,11 +43,10 @@ namespace rdc
     class   CrackControl : public TControl
     {
     public:
-        friend class DesignerHook;
+        friend class DesignerHook; 
+        // 非派生类通过CallSetDesigning 来调用 SetDesigning
         void   CallSetDesigning(bool Value, bool SetChildren);
     private:
-        //virtual CrackControl(Classes::TComponent* Owner);
-        //virtual ~CrackControl();
     };
     
 
