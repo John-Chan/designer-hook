@@ -56,7 +56,7 @@ void __fastcall DesignerHook::Notification(TPersistent* AnObject, TOperation Ope
             Remove(index);
         }
         if(AnObject == Form_){
-            DownCast<CrackComponent*,TCustomForm*>(Form_)-> SetDesigning(false, true);
+            ForceCast<CrackComponent*,TCustomForm*>(Form_)-> SetDesigning(false, true);
             Form_=NULL;
         }
         break;
