@@ -329,11 +329,6 @@ void    DesignerHook::ClearGrabHandle(TControl* Ctrol)
             if( p && p->Control_ == Ctrol)
                 delete  p;
         }
-        /*
-        GrabHandle* p=DownCast<GrabHandle*,TComponent*>(GrabHandleManager_->Components[i]);// dynamic_cast<GrabHandle>(GrabHandleManager_->Components[i]);
-        if( p && p->Control_ == Ctrol)
-            delete  p;
-        */
     }
 }
 void    DesignerHook::SetDragging(const bool b)
@@ -604,6 +599,7 @@ DesignerHook*  DesignerHook::BeginDesign(TCustomForm* Form, TWinControl* Root)
     Form->Designer=di_hook;
     (ForceCast<CrackComponent*,void*>(Form))->CallSetDesigning(true, false);
     (ForceCast<CrackComponent*,void*>(Root))->CallSetDesigning(true, true);
+    //(ForceCast<CrackControl*,void*>(Root))->CallSetDesigning(true, true);
     return p_designer;
 }
 void   DesignerHook::EndDesign(DesignerHook* hooker)
@@ -613,13 +609,5 @@ void   DesignerHook::EndDesign(DesignerHook* hooker)
     Form->Designer=NULL;
     delete  hooker;
 }
-/*
-void  DesignerHook::EndDesign(TCustomForm* Form)
-{
-    //TCrackComponent(Form).SetDesigning(False, True);
-    //Form.Designer := nil;
-    (ForceCast<CrackComponent*,void*>(Form))->CallSetDesigning(false, true);
-    Form->Designer=NULL;
-}
-*/
+
 }//namespace

@@ -15,9 +15,12 @@ namespace rdc
     class DesignerHook : public TInterfacedObject, /*IDesignerNotify,  */ IDesignerHook
     {
     public: // 辅助函数
+
+        //开始设计.设计整个窗口里,以窗口为Owner的控件
         static DesignerHook*  BeginDesign(TCustomForm* Form);
+        //开始设计.设计窗口里,Root控件为Owner的控件
         static DesignerHook*  BeginDesign(TCustomForm* Form, TWinControl* Root); 
-        //static void           EndDesign(TCustomForm* Form);
+        //终止设计
         static void           EndDesign(DesignerHook* hooker);
     public: // IUnknown的接口
         virtual ULONG __stdcall AddRef(void);
