@@ -5,6 +5,7 @@
 //---------------------------------------------------------------------------
 USEFORM("main.cpp", Form1);
 USEFORM("Unit2.cpp", Form2);
+USEFORM("frame.cpp", Frame1); /* TFrame: File Type */
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

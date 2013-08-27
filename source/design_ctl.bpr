@@ -5,12 +5,12 @@
     <VERSION value="BCB.06.00"/>
     <PROJECT value="bin\design_ctl.exe"/>
     <OBJFILES value="obj\design_ctl.obj obj\main.obj obj\rdc_utility.obj obj\GrabHandle.obj 
-      obj\DesignerHook.obj obj\Unit2.obj"/>
+      obj\DesignerHook.obj obj\Unit2.obj obj\frame.obj"/>
     <RESFILES value="design_ctl.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) main.dfm Unit2.dfm"/>
+    <RESDEPEN value="$(RESFILES) main.dfm Unit2.dfm frame.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value=""/>
     <SPARELIBS value="vcl.lib rtl.lib"/>
@@ -65,6 +65,7 @@
       <FILE FILENAME="runtime_desing_control\TypeCast.hpp" FORMNAME="" UNITNAME="TypeCast.hpp" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="runtime_desing_control\Setting.h" FORMNAME="" UNITNAME="Setting.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="Unit2.cpp" FORMNAME="Form2" UNITNAME="Unit2" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="frame.cpp" FORMNAME="Frame1" UNITNAME="frame" CONTAINERID="CCompiler" DESIGNCLASS="TFrame" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

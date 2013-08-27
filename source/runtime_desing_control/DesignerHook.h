@@ -49,6 +49,8 @@ namespace rdc
         //鼠标移动时,是不是显示边框
         void        ShowGrabWhenMove(bool b);  
         void        Clear();
+        TPoint&     GetBeforDragPos();   
+        const TPoint&     GetBeforDragPos()const;
     private:
         //锁定鼠标到某一个范围
         void    MouseLock(TControl* Sender);
@@ -78,7 +80,7 @@ namespace rdc
         DYNAMIC void __fastcall KeyDown(TControl* Sender,Word &Key,Classes::TShiftState Shift);
 
 
-    public: //TODO: private
+    private: 
         GrabHandleManager*  GrabHandleManager_;
         TCustomForm*        Form_;
         TWinControl*        Root_;

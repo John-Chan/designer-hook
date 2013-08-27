@@ -165,7 +165,7 @@ void    __fastcall GrabHandle::MouseDown(TMouseButton Button, Classes::TShiftSta
         return ;
     }
     GetDesigner()->Dragging=true;
-    GetDesigner()->BeforDragPos_ = ClientToScreen(Point(X, Y));
+    GetDesigner()->GetBeforDragPos() = ClientToScreen(Point(X, Y));
     MouseCapture = true;
   
 }
@@ -190,12 +190,12 @@ void    __fastcall GrabHandle::MouseMove( Classes::TShiftState Shift, int X, int
     cPos =  ClientToScreen(Point(X, Y));
 
     for(;ControlIndex < GetDesigner()->ControlCount - 1;++ControlIndex){
-        Hooker_->Controls[ControlIndex]->Left = Hooker_->Controls[ControlIndex]->Left + (X - Hooker_->BeforDragPos_.x);
-        Hooker_->Controls[ControlIndex]->Top = Hooker_->Controls[ControlIndex]->Top + (Y - Hooker_->BeforDragPos_.y);
+        Hooker_->Controls[ControlIndex]->Left = Hooker_->Controls[ControlIndex]->Left + (X - Hooker_->GetBeforDragPos().x);
+        Hooker_->Controls[ControlIndex]->Top = Hooker_->Controls[ControlIndex]->Top + (Y - Hooker_->GetBeforDragPos().y);
     }
 
-    cX = Hooker_->BeforDragPos_.x - cPos.x;
-    cY = Hooker_->BeforDragPos_.y - cPos.y;
+    cX = Hooker_->GetBeforDragPos().x - cPos.x;
+    cY = Hooker_->GetBeforDragPos().y - cPos.y;
     if(::abs(cX) < 2 && ::abs(cY) < 2){
         return;
     }
@@ -206,12 +206,12 @@ void    __fastcall GrabHandle::MouseMove( Classes::TShiftState Shift, int X, int
         if(Control_->Width + cX > 1){
           Control_->Left = Control_->Left - cX;
           Control_->Width = Control_->Width + cX;
-          GetDesigner()->BeforDragPos_.x = cPos.x;
+          GetDesigner()->GetBeforDragPos().x = cPos.x;
         }
         if(Control_->Height + cY > 1 ){
             Control_->Top = Control_->Top - cY;
             Control_->Height = Control_->Height + cY;
-            GetDesigner()->BeforDragPos_.y = cPos.y;
+            GetDesigner()->GetBeforDragPos().y = cPos.y;
         }
 
         break;
@@ -219,20 +219,20 @@ void    __fastcall GrabHandle::MouseMove( Classes::TShiftState Shift, int X, int
         if(Control_->Height + cY > 1){
             Control_->Top = Control_->Top - cY;
             Control_->Height = Control_->Height + cY;
-            GetDesigner()->BeforDragPos_.y = cPos.y;
+            GetDesigner()->GetBeforDragPos().y = cPos.y;
         }
         break;
     case fdRightUp:
         if(Control_->Width - cX > 1){
             
           Control_->Width = Control_->Width - cX;
-          GetDesigner()->BeforDragPos_.x = cPos.x;
+          GetDesigner()->GetBeforDragPos().x = cPos.x;
         } 
         if(Control_->Height + cY > 1){
             
           Control_->Top = Control_->Top - cY;
           Control_->Height = Control_->Height + cY;
-          GetDesigner()->BeforDragPos_.y = cPos.y;
+          GetDesigner()->GetBeforDragPos().y = cPos.y;
         }
         
         break;
@@ -240,18 +240,18 @@ void    __fastcall GrabHandle::MouseMove( Classes::TShiftState Shift, int X, int
         if(Control_->Width - cX > 1){
             
           Control_->Width = Control_->Width - cX;
-          GetDesigner()->BeforDragPos_.x = cPos.x;
+          GetDesigner()->GetBeforDragPos().x = cPos.x;
         }
         
         break;
     case fdRightDown:
         if(Control_->Width - cX > 1){
           Control_->Width = Control_->Width - cX;
-          GetDesigner()->BeforDragPos_.x = cPos.x;
+          GetDesigner()->GetBeforDragPos().x = cPos.x;
         }  
         if(Control_->Height - cY > 1){
           Control_->Height = Control_->Height - cY;
-          GetDesigner()->BeforDragPos_.y = cPos.y;
+          GetDesigner()->GetBeforDragPos().y = cPos.y;
         }
         
         break;
@@ -259,7 +259,7 @@ void    __fastcall GrabHandle::MouseMove( Classes::TShiftState Shift, int X, int
         if(Control_->Height - cY > 1){
             
           Control_->Height = Control_->Height - cY;
-          GetDesigner()->BeforDragPos_.y = cPos.y;
+          GetDesigner()->GetBeforDragPos().y = cPos.y;
         }
         
         break;
@@ -267,18 +267,18 @@ void    __fastcall GrabHandle::MouseMove( Classes::TShiftState Shift, int X, int
         if(Control_->Width + cX > 1 ){
           Control_->Left = Control_->Left - cX;
           Control_->Width = Control_->Width + cX;
-          GetDesigner()->BeforDragPos_.x = cPos.x;
+          GetDesigner()->GetBeforDragPos().x = cPos.x;
         }
         if(Control_->Height - cY > 1){
           Control_->Height = Control_->Height - cY;
-          GetDesigner()->BeforDragPos_.y = cPos.y;
+          GetDesigner()->GetBeforDragPos().y = cPos.y;
         }
         break;
     case fdLeft:
         if(Control_->Width + cX > 1){
           Control_->Left = Control_->Left - cX;
           Control_->Width = Control_->Width + cX;
-          GetDesigner()->BeforDragPos_.x = cPos.x;
+          GetDesigner()->GetBeforDragPos().x = cPos.x;
         }
         break;
     }

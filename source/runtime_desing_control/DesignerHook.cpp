@@ -148,11 +148,21 @@ ShowGrabWhenMove_(false)
 __fastcall DesignerHook::~DesignerHook()
 {
     if(Form_) ((CrackComponent*)Form_)->SetDesigning(false, true);
-
+    Clear();
     delete GrabHandleManager_;
     delete Controls_;
 
 }
+
+TPoint&     DesignerHook::GetBeforDragPos()
+{
+    return BeforDragPos_;
+}
+const TPoint&     DesignerHook::GetBeforDragPos()const
+{
+    return BeforDragPos_;
+}
+
 void        DesignerHook::ShowGrabWhenMove(bool b)
 {
     ShowGrabWhenMove_=b;
