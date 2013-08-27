@@ -11,3 +11,10 @@
 *.lai
 *.la
 *.a
+
+#c++ builder
+*.~*
+*.obj
+*.tds
+*.ddp
+*.exe
