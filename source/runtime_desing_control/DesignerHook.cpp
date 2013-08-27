@@ -131,9 +131,8 @@ Classes::TComponent* __fastcall DesignerHook::GetRoot(void)
 }
 
 
-////////////////////////////////////////////////////////////////////////
 /************************************************************************
-//  GrabHandle
+//  DesignerHook
 //  --------------------------------------------------------------------
 //
 ************************************************************************/
@@ -164,7 +163,15 @@ __fastcall DesignerHook::~DesignerHook()
 
 }
 
-/////////
+bool        DesignerHook::DirectShowable(GrabHandleDirect drect)
+{
+    if(drect == fdLeftUp || drect == fdLeftDown ||drect == fdRightUp ||drect == fdRightDown  )
+    {
+        return true ;
+    }
+    return false;
+    
+}
 //锁定鼠标到某一个范围
 void    DesignerHook::MouseLock(TControl* Sender)
 {
@@ -263,7 +270,7 @@ void    DesignerHook::Remove(int Index)
 
 void    DesignerHook::Clear()
 {
-    for(int i=0;i<Controls_->Count - 1;++i){
+    for(int i=0;i<=Controls_->Count - 1;++i){
         Remove(i);
     }
 }
@@ -289,17 +296,19 @@ TControl*   DesignerHook::Add(TControl* Ctrol)
 void        DesignerHook::AddRectControls(TWinControl* Parent,TRect Rect)
 {
     Clear();
-    for(int i=0; i<Parent->ControlCount - 1 ;++i ){
+    for(int i=0; i<=Parent->ControlCount - 1 ;++i ){
         if( InRect(Rect, Parent->Controls[i]->BoundsRect) && OwnerCheck(Parent->Controls[i], Root_)){
             Add(Parent->Controls[i]);
         }
     }
 
 }
+
 void    DesignerHook::ShowGrabHandle(const bool b)
 {
+
     int ComponentIndex=0;
-    for(;ComponentIndex < GrabHandleManager_->ComponentCount - 1;++ComponentIndex){
+    for(;ComponentIndex <= GrabHandleManager_->ComponentCount - 1;++ComponentIndex){
         if( CheckPtrType<GrabHandle*>(GrabHandleManager_->Components[ComponentIndex])){
             GrabHandle* GrabHandlePtr=DownCast<GrabHandle*,TComponent*>(GrabHandleManager_->Components[ComponentIndex]);
             if(ControlCount > 1){
@@ -308,10 +317,8 @@ void    DesignerHook::ShowGrabHandle(const bool b)
                 GrabHandlePtr->Color=kGrabHandleColorNormal;
             }
             GrabHandlePtr->Pos();
-            bool ctl_count_showable= (ControlCount >= 1 ) ;
-            bool direct_showable= (GrabHandlePtr->Direct_ == fdLeftUp|| GrabHandlePtr->Direct_ ==fdLeftDown ||GrabHandlePtr->Direct_ == fdRightUp ||GrabHandlePtr->Direct_ == fdRightDown );
-            //GrabHandlePtr->Color= Selecting_?kGrabHandleColorActive:kGrabHandleColorNormal;
-            GrabHandlePtr->Visible=b && ctl_count_showable && direct_showable ;
+            bool can_show= b &&( (ControlCount == 1)  || (ControlCount > 1 && DirectShowable(GrabHandlePtr->Direct_)) );
+            GrabHandlePtr->Visible=can_show;
         }
     }
 }
@@ -366,9 +373,9 @@ void __fastcall DesignerHook::MouseDown(TControl* Sender,TMouseButton Button, Cl
             Add(Sender);
             Dragging_=false;
         }else{
-        Remove(Sender);
-        ShowGrabHandle(true);
-      }
+            Remove(Sender);
+            ShowGrabHandle(true);
+        }
     }else {
         // if (ssCtrl in Shift) or (Sender = FRoot) then
         if( Shift.Contains(ssCtrl) || Sender == Root_){
@@ -488,7 +495,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_UP:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<GetControlCount() -1 ;++i){
+                for(int index=0;i<=GetControlCount() -1 ;++i){
                     Controls[index]->Top= Controls[index]->Top -1;
                 }
             }__finally{
@@ -498,7 +505,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_DOWN:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<GetControlCount() -1 ;++i){
+                for(int index=0;i<=GetControlCount() -1 ;++i){
                     Controls[index]->Top= Controls[index]->Top +1;
                 }
             }__finally{
@@ -508,7 +515,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_LEFT:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<GetControlCount() -1 ;++i){
+                for(int index=0;i<=GetControlCount() -1 ;++i){
                     Controls[index]->Left= Controls[index]->Left -1;
                 }
             }__finally{
@@ -518,7 +525,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_RIGHT:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<GetControlCount() -1 ;++i){
+                for(int index=0;i<=GetControlCount() -1 ;++i){
                     Controls[index]->Left= Controls[index]->Left +1;
                 }
             }__finally{
@@ -531,7 +538,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_UP:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<GetControlCount() -1 ;++i){
+                for(int index=0;i<=GetControlCount() -1 ;++i){
                     if(Controls[index]->Height - 1 > 1)
                         Controls[index]->Height= Controls[index]->Height -1;
                 }
@@ -542,7 +549,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_DOWN:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<GetControlCount() -1 ;++i){
+                for(int index=0;i<=GetControlCount() -1 ;++i){
                     if(Controls[index]->Height + 1 > 1)
                         Controls[index]->Height= Controls[index]->Height + 1;
                 }
@@ -553,7 +560,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_LEFT:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<GetControlCount() -1 ;++i){
+                for(int index=0;i<=GetControlCount() -1 ;++i){
                     if(Controls[index]->Width - 1 > 1)
                         Controls[index]->Width= Controls[index]->Width -1;
                 }
@@ -564,7 +571,7 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_RIGHT:
             ShowGrabHandle(false);
             __try{
-                for(int index=0;i<GetControlCount() -1 ;++i){
+                for(int index=0;i<=GetControlCount() -1 ;++i){
                     if(Controls[index]->Width + 1 > 1)
                         Controls[index]->Width= Controls[index]->Width +1;
                 }

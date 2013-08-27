@@ -127,12 +127,14 @@ namespace rdc
         TControl*   GetControls(int Index);
         void        AddRectControls(TWinControl* Parent,TRect Rect);
         bool        OwnerCheck(TControl* Sender, TComponent* CheckOnwer);
+        bool        DirectShowable(GrabHandleDirect drect);
 
         DYNAMIC void __fastcall MouseDown(TControl* Sender,TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
         DYNAMIC void __fastcall MouseUp(TControl* Sender,TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
         DYNAMIC void __fastcall MouseMove(TControl* Sender,Classes::TShiftState Shift, int X, int Y);
         
         DYNAMIC void __fastcall KeyDown(TControl* Sender,Word &Key,Classes::TShiftState Shift);
+
 
     public: //TODO: private
         GrabHandleManager*  GrabHandleManager_;
@@ -148,6 +150,7 @@ namespace rdc
         TRect  OldRect_;
         TRect  NewRect_;
         TRect  MouseRect_;//鼠标被限制的范围
+
 
         /*
         FGrabHandleManager: TGrabHandleManager;

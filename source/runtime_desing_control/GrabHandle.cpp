@@ -37,7 +37,7 @@ DesignerHook*  GrabHandleManager::GetDesigner()
 //  --------------------------------------------------------------------
 //
 ************************************************************************/
-static const int GrabHandleSize=4;
+static const int GrabHandleSize=8;
 
 __fastcall GrabHandle::GrabHandle(/*TComponent* GrabManager*/GrabHandleManager* GrabManager, TControl* Control,GrabHandleDirect Direct)
 :TCustomControl(GrabManager),
@@ -58,8 +58,6 @@ __fastcall GrabHandle::~GrabHandle()
 
 void    GrabHandle::Pos()
 {
-    //int X[3];
-    //int Y[3];
     TPoint  angle_0,angle_45,angle_90,angle_135,angle_180,angle_225,angle_270,angle_315;
     int x0= Control_->Left - GrabHandleSize / 2;
     int x1= Control_->Left + (Control_->Width - GrabHandleSize) / 2;
@@ -92,55 +90,58 @@ void    GrabHandle::Pos()
 
     angle_315.x= x0;
     angle_315.y= y0;
-    /*
+    ///*
+    
+    int X[3];
+    int Y[3];
     X[0] = Control_->Left - GrabHandleSize / 2;
     X[1] = Control_->Left + (Control_->Width - GrabHandleSize) / 2;
     X[2] = Control_->Left + Control_->Width - GrabHandleSize / 2;
     Y[0] = Control_->Top - GrabHandleSize / 2;
     Y[1] = Control_->Top + (Control_->Height - GrabHandleSize) / 2;
     Y[2] = Control_->Top + Control_->Height - GrabHandleSize / 2;
-    */
+    //*/
     switch(Direct_)
     {
     case fdLeftUp: 
         Cursor = crSizeNWSE;
-        SetBounds(angle_315.x, angle_315.y, GrabHandleSize, GrabHandleSize);
-        //SetBounds(X[0], Y[0], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_315.x, angle_315.y, GrabHandleSize, GrabHandleSize);
+        SetBounds(X[0], Y[0], GrabHandleSize, GrabHandleSize);
         break;
     case fdUp:  
         Cursor = crSizeNS;  
-        SetBounds(angle_0.x, angle_0.y, GrabHandleSize, GrabHandleSize);
-        //SetBounds(X[1], Y[0], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_0.x, angle_0.y, GrabHandleSize, GrabHandleSize);
+        SetBounds(X[1], Y[0], GrabHandleSize, GrabHandleSize);
         break;
     case fdRightUp: 
         Cursor = crSizeNESW;
-        SetBounds(angle_45.x, angle_45.y, GrabHandleSize, GrabHandleSize);
-        //SetBounds(X[2], Y[0], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_45.x, angle_45.y, GrabHandleSize, GrabHandleSize);
+        SetBounds(X[2], Y[0], GrabHandleSize, GrabHandleSize);
         break;
     case fdRight: 
         Cursor = crSizeWE;     
-        SetBounds(angle_90.x, angle_90.y, GrabHandleSize, GrabHandleSize);
-        //SetBounds(X[2], Y[1], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_90.x, angle_90.y, GrabHandleSize, GrabHandleSize);
+        SetBounds(X[2], Y[1], GrabHandleSize, GrabHandleSize);
         break;
     case fdRightDown:  
         Cursor = crSizeNWSE;
-        SetBounds(angle_135.x, angle_135.y, GrabHandleSize, GrabHandleSize);
-        //SetBounds(X[2], Y[2], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_135.x, angle_135.y, GrabHandleSize, GrabHandleSize);
+        SetBounds(X[2], Y[2], GrabHandleSize, GrabHandleSize);
         break;
     case fdDown: 
         Cursor = crSizeNS;
-        SetBounds(angle_180.x, angle_180.y, GrabHandleSize, GrabHandleSize);
-        //SetBounds(X[1], Y[2], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_180.x, angle_180.y, GrabHandleSize, GrabHandleSize);
+        SetBounds(X[1], Y[2], GrabHandleSize, GrabHandleSize);
         break;
     case fdLeftDown: 
         Cursor = crSizeNESW;   
-        SetBounds(angle_225.x, angle_225.y, GrabHandleSize, GrabHandleSize);
-        //SetBounds(X[0], Y[2], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_225.x, angle_225.y, GrabHandleSize, GrabHandleSize);
+        SetBounds(X[0], Y[2], GrabHandleSize, GrabHandleSize);
         break;
     case fdLeft:
         Cursor = crSizeWE;
-        SetBounds(angle_270.x, angle_270.y, GrabHandleSize, GrabHandleSize);
-        //SetBounds(X[0], Y[1], GrabHandleSize, GrabHandleSize);
+        //SetBounds(angle_270.x, angle_270.y, GrabHandleSize, GrabHandleSize);
+        SetBounds(X[0], Y[1], GrabHandleSize, GrabHandleSize);
         break;
     } 
     if (GrabManager_->GetDesigner()->ControlCount > 1){

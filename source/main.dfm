@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 192
-  Top = 130
+  Left = 0
+  Top = 107
   Width = 309
   Height = 167
   Caption = 'Form1'
@@ -11,7 +11,6 @@ object Form1: TForm1
   Font.Name = #26032#23435#20307
   Font.Style = []
   OldCreateOrder = False
-  Position = poDesktopCenter
   PixelsPerInch = 96
   TextHeight = 15
   object btn1: TButton

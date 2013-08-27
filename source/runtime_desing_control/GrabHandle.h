@@ -6,6 +6,7 @@
 #include <Classes.hpp>   //   TShiftState
 #include <Controls.hpp>  //   TMouseButton
 
+
 //---------------------------------------------------------------------------
 namespace rdc
 {
@@ -23,7 +24,7 @@ namespace rdc
         fdLeftDown,
         fdLeft
     };
- 
+    
     /************************************************************************
     //  GrabHandleManager
     //  --------------------------------------------------------------------
