@@ -1,4 +1,4 @@
 designer-hook
 =============
 
-VCL comments runtime designer
+VCL Component runtime designer
