@@ -4,12 +4,13 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="bin\design_ctl.exe"/>
-    <OBJFILES value="obj\design_ctl.obj obj\main.obj obj\Unit2.obj obj\frame.obj"/>
+    <OBJFILES value="obj\design_ctl.obj obj\main.obj obj\Unit2.obj obj\DesignerHook.obj 
+      obj\GrabHandle.obj obj\rdc_utility.obj"/>
     <RESFILES value="design_ctl.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) main.dfm Unit2.dfm frame.dfm"/>
+    <RESDEPEN value="$(RESFILES) main.dfm Unit2.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value=""/>
     <SPARELIBS value="vcl.lib rtl.lib"/>
@@ -20,7 +21,7 @@
       inetdbbde.bpi inetdbxpress.bpi inetdb.bpi nmfast.bpi webdsnap.bpi 
       bcbie.bpi websnap.bpi soaprtl.bpi dclocx.bpi dbexpress.bpi dbxcds.bpi 
       indy.bpi bcb2kaxserver.bpi"/>
-    <PATHCPP value=".;"/>
+    <PATHCPP value=".;..\source\runtime_desing_control"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -30,16 +31,15 @@
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
     <MAINSOURCE value="design_ctl.cpp"/>
-    <INCLUDEPATH value="&quot;C:\Program Files\Borland\CBuilder6\Projects&quot;;runtime_desing_control;&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot;;D:\_WorkSpace_\CB6\design_ctl;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="&quot;C:\Program Files\Borland\CBuilder6\Projects&quot;;runtime_desing_control;&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot;;D:\_WorkSpace_\CB6\design_ctl;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\source\runtime_desing_control;&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot;;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\source\runtime_desing_control;&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot;;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I&quot;C:\Program Files\Borland\CBuilder6\Projects&quot; -Iruntime_desing_control 
-      -I&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot; 
-      -ID:\_WorkSpace_\CB6\design_ctl -I$(BCB)\include -I$(BCB)\include\vcl 
-      -src_suffix cpp -D_DEBUG -boa"/>
+    <IDLCFLAGS value="-I..\source\runtime_desing_control 
+      -I&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot; -I$(BCB)\include 
+      -I$(BCB)\include\vcl -src_suffix cpp -D_DEBUG -boa"/>
     <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
       -tW -tWM"/>
     <PFLAGS value="-N2obj -N0obj -$YD -$W -$O- -$A8 -v -JPHNE -M"/>
@@ -59,7 +59,11 @@
       <FILE FILENAME="design_ctl.cpp" FORMNAME="" UNITNAME="design_ctl" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="main.cpp" FORMNAME="Form1" UNITNAME="main" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="Unit2.cpp" FORMNAME="Form2" UNITNAME="Unit2" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="frame.cpp" FORMNAME="Frame1" UNITNAME="frame" CONTAINERID="CCompiler" DESIGNCLASS="TFrame" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\source\runtime_desing_control\DesignerHook.cpp" FORMNAME="" UNITNAME="DesignerHook.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\source\runtime_desing_control\GrabHandle.cpp" FORMNAME="" UNITNAME="GrabHandle.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\source\runtime_desing_control\rdc_utility.cpp" FORMNAME="" UNITNAME="rdc_utility.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\source\runtime_desing_control\Setting.h" FORMNAME="" UNITNAME="Setting.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\source\runtime_desing_control\TypeCast.hpp" FORMNAME="" UNITNAME="TypeCast.hpp" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -93,14 +97,18 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=2
-Item0=C:\Program Files\Borland\CBuilder6\Projects;runtime_desing_control;C:\Program Files (x86)\Borland\CBuilder6\Projects;D:\_WorkSpace_\CB6\design_ctl;$(BCB)\include;$(BCB)\include\vcl
-Item1=runtime_desing_control;C:\Program Files (x86)\Borland\CBuilder6\Projects;D:\_WorkSpace_\CB6\design_ctl;$(BCB)\include;$(BCB)\include\vcl
+Count=4
+Item0=..\source\runtime_desing_control;C:\Program Files (x86)\Borland\CBuilder6\Projects;$(BCB)\include;$(BCB)\include\vcl
+Item1=..\source\runtime_desing_control;C:\Program Files\Borland\CBuilder6\Projects;runtime_desing_control;C:\Program Files (x86)\Borland\CBuilder6\Projects;D:\_WorkSpace_\CB6\design_ctl;$(BCB)\include;$(BCB)\include\vcl
+Item2=C:\Program Files\Borland\CBuilder6\Projects;runtime_desing_control;C:\Program Files (x86)\Borland\CBuilder6\Projects;D:\_WorkSpace_\CB6\design_ctl;$(BCB)\include;$(BCB)\include\vcl
+Item3=runtime_desing_control;C:\Program Files (x86)\Borland\CBuilder6\Projects;D:\_WorkSpace_\CB6\design_ctl;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=2
-Item0=C:\Program Files\Borland\CBuilder6\Projects;runtime_desing_control;C:\Program Files (x86)\Borland\CBuilder6\Projects;D:\_WorkSpace_\CB6\design_ctl;$(BCB)\lib\obj;$(BCB)\lib
-Item1=runtime_desing_control;C:\Program Files (x86)\Borland\CBuilder6\Projects;D:\_WorkSpace_\CB6\design_ctl;$(BCB)\lib\obj;$(BCB)\lib
+Count=4
+Item0=..\source\runtime_desing_control;C:\Program Files (x86)\Borland\CBuilder6\Projects;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\source\runtime_desing_control;C:\Program Files\Borland\CBuilder6\Projects;runtime_desing_control;C:\Program Files (x86)\Borland\CBuilder6\Projects;D:\_WorkSpace_\CB6\design_ctl;$(BCB)\lib\obj;$(BCB)\lib
+Item2=C:\Program Files\Borland\CBuilder6\Projects;runtime_desing_control;C:\Program Files (x86)\Borland\CBuilder6\Projects;D:\_WorkSpace_\CB6\design_ctl;$(BCB)\lib\obj;$(BCB)\lib
+Item3=runtime_desing_control;C:\Program Files (x86)\Borland\CBuilder6\Projects;D:\_WorkSpace_\CB6\design_ctl;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1

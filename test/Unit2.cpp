@@ -4,7 +4,7 @@
 #pragma hdrstop
 
 #include "Unit2.h"   
-#include "runtime_desing_control\DesignerHook.h"
+#include "DesignerHook.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -22,10 +22,11 @@ __fastcall TForm2::TForm2(TComponent* Owner)
 
 void __fastcall TForm2::btn1Click(TObject *Sender)
 {
-
+    /*
     if(g_hooker2==NULL){
         g_hooker2=rdc::DesignerHook::BeginDesign(this,pnl1);
         //g_hooker2=rdc::DesignerHook::BeginDesign(this);
     }
+    */
 }
 //---------------------------------------------------------------------------

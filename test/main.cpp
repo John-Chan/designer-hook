@@ -5,7 +5,7 @@
 
 #include "main.h"
 #include "Unit2.h"
-#include "runtime_desing_control\DesignerHook.h"
+#include "DesignerHook.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -23,7 +23,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 void __fastcall TForm1::btn1Click(TObject *Sender)
 {
     if(fm2 == NULL){
-        fm2=new TForm2(NULL);
+        fm2=new TForm2(Application);
         fm2->Show();
     }
 }
