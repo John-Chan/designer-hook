@@ -50,7 +50,9 @@ namespace rdc
         __property int ControlCount = {read=GetControlCount, nodefault};
         __property TControl* Controls[int Index] = {read=GetControls};
         //鼠标移动时,是不是显示边框
-        void        ShowGrabWhenMove(bool b);  
+        void        ShowGrabWhenMove(bool b);
+        //控件始终在父控件的区域内
+        void        KeepChildInParentArea(bool b);
         void        Clear();
         TPoint&     GetBeforDragPos();   
         const TPoint&     GetBeforDragPos()const;
@@ -98,6 +100,7 @@ namespace rdc
         TRect  NewRect_;
         TRect  MouseRect_;//鼠标被限制的范围
         bool   ShowGrabWhenMove_;
+        bool   KeepChildInArea_;
 
     };
 }

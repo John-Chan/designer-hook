@@ -141,7 +141,8 @@ PointEnd_(),
 OldRect_(),
 NewRect_(),
 MouseRect_(),
-ShowGrabWhenMove_(false)
+ShowGrabWhenMove_(false),
+KeepChildInArea_(true)
 {
     GrabHandleManager_=new GrabHandleManager(this);
 }
@@ -162,7 +163,10 @@ const TPoint&     DesignerHook::GetBeforDragPos()const
 {
     return BeforDragPos_;
 }
-
+void        DesignerHook::KeepChildInParentArea(bool b)
+{
+    KeepChildInArea_=b;
+}
 void        DesignerHook::ShowGrabWhenMove(bool b)
 {
     ShowGrabWhenMove_=b;
@@ -459,9 +463,17 @@ void __fastcall DesignerHook::MouseMove(TControl* Sender,Classes::TShiftState Sh
         pos= Mouse->CursorPos;
         for(i=Controls_->Count - 1;i>=0;--i){
             if(Controls[i]->Parent == Sender->Parent){
-                //如果都是同一个Paren的话  
-                Controls[i]->Left = Controls[i]->Left - (BeforDragPos_.x - pos.x);
-                Controls[i]->Top = Controls[i]->Top - (BeforDragPos_.y - pos.y);
+                //如果都是同一个Paren的话
+
+                
+                int LeftNew=  Controls[i]->Left - (BeforDragPos_.x - pos.x);
+                int TopNew=   Controls[i]->Top - (BeforDragPos_.y - pos.y);
+                if(LeftNew >0 && (Controls[i]->Width + LeftNew)< Controls[i]->Parent->Width  && KeepChildInArea_){
+                    Controls[i]->Left = LeftNew;
+                }
+                if(TopNew > 0 && (Controls[i]->Height +TopNew )< Controls[i]->Parent->Height && KeepChildInArea_){
+                    Controls[i]->Top =  TopNew;
+                }
             }else{
                 Remove(i);
             }
@@ -496,8 +508,18 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
         case VK_UP:
             ShowGrabHandle(false);
             __try{
+                /*
+                if(LeftNew >0 && (Controls[index]->Width + LeftNew)< Controls[index]->Parent->Width  && KeepChildInArea_){
+                    Controls[i]->Left = LeftNew;
+                }
+                if(TopNew > 0 && (Controls[i]->Height +TopNew )< Controls[index]->Parent->Height && KeepChildInArea_){
+                    Controls[i]->Top =  TopNew;
+                }
+                */
                 for(int index=0;index<=GetControlCount() -1 ;++index){
-                    Controls[index]->Top= Controls[index]->Top -1;
+                    int TopNew= Controls[index]->Top - kMoveUpStepByKey;
+                    if(TopNew>0 &&  (Controls[index]->Height + TopNew)< Controls[index]->Parent->Height  && KeepChildInArea_)
+                        Controls[index]->Top= TopNew;
                 }
             }__finally{
                 ShowGrabHandle(true);
@@ -507,7 +529,9 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
             ShowGrabHandle(false);
             __try{
                 for(int index=0;index<=GetControlCount() -1 ;++index){
-                    Controls[index]->Top= Controls[index]->Top +1;
+                    int TopNew= Controls[index]->Top + kMoveDownStepByKey;
+                    if(TopNew>0 &&  (Controls[index]->Height + TopNew)< Controls[index]->Parent->Height  && KeepChildInArea_)
+                        Controls[index]->Top= TopNew;
                 }
             }__finally{
                 ShowGrabHandle(true);
@@ -517,7 +541,9 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
             ShowGrabHandle(false);
             __try{
                 for(int index=0;index<=GetControlCount() -1 ;++index){
-                    Controls[index]->Left= Controls[index]->Left -1;
+                    int LeftNew= Controls[index]->Left - kMoveLeftStepByKey ;
+                    if(LeftNew>0 && (Controls[index]->Width + LeftNew)< Controls[index]->Parent->Width && KeepChildInArea_ )
+                        Controls[index]->Left= LeftNew;
                 }
             }__finally{
                 ShowGrabHandle(true);
@@ -527,7 +553,9 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
             ShowGrabHandle(false);
             __try{
                 for(int index=0;index<=GetControlCount() -1 ;++index){
-                    Controls[index]->Left= Controls[index]->Left +1;
+                    int LeftNew= Controls[index]->Left + kMoveRightStepByKey ;
+                    if(LeftNew>0 && (Controls[index]->Width + LeftNew)< Controls[index]->Parent->Width && KeepChildInArea_ )
+                        Controls[index]->Left= LeftNew;
                 }
             }__finally{
                 ShowGrabHandle(true);
@@ -540,8 +568,8 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
             ShowGrabHandle(false);
             __try{
                 for(int index=0;index<=GetControlCount() -1 ;++index){
-                    if(Controls[index]->Height - 1 > 1)
-                        Controls[index]->Height= Controls[index]->Height -1;
+                    if(Controls[index]->Height - kHeightStepByKey > 1)
+                        Controls[index]->Height= Controls[index]->Height - kHeightStepByKey;
                 }
             }__finally{
                 ShowGrabHandle(true);
@@ -551,8 +579,8 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
             ShowGrabHandle(false);
             __try{
                 for(int index=0;index<=GetControlCount() -1 ;++index){
-                    if(Controls[index]->Height + 1 > 1)
-                        Controls[index]->Height= Controls[index]->Height + 1;
+                    if(Controls[index]->Height + kHeightStepByKey > 1)
+                        Controls[index]->Height= Controls[index]->Height + kHeightStepByKey;
                 }
             }__finally{
                 ShowGrabHandle(true);
@@ -562,8 +590,8 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
             ShowGrabHandle(false);
             __try{
                 for(int index=0;index<=GetControlCount() -1 ;++index){
-                    if(Controls[index]->Width - 1 > 1)
-                        Controls[index]->Width= Controls[index]->Width -1;
+                    if(Controls[index]->Width - kWidthStepByKey > 1)
+                        Controls[index]->Width= Controls[index]->Width -kWidthStepByKey;
                 }
             }__finally{
                 ShowGrabHandle(true);
@@ -573,8 +601,8 @@ void __fastcall DesignerHook::KeyDown(TControl* Sender,Word &Key,Classes::TShift
             ShowGrabHandle(false);
             __try{
                 for(int index=0;index<=GetControlCount() -1 ;++index){
-                    if(Controls[index]->Width + 1 > 1)
-                        Controls[index]->Width= Controls[index]->Width +1;
+                    if(Controls[index]->Width + kWidthStepByKey > 1)
+                        Controls[index]->Width= Controls[index]->Width +kWidthStepByKey;
                 }
             }__finally{
                 ShowGrabHandle(true);

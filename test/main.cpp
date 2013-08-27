@@ -31,15 +31,19 @@ void __fastcall TForm1::btn1Click(TObject *Sender)
 
 void __fastcall TForm1::btn2Click(TObject *Sender)
 {
-    if(fm2 && hooker==NULL)
+    if(fm2 && hooker==NULL){
         hooker=rdc::DesignerHook::BeginDesign(fm2);
+        //hooker=rdc::DesignerHook::BeginDesign(fm2,fm2->pnl1);
+    }
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::btn3Click(TObject *Sender)
 {
-    if(hooker)
+    if(hooker){
         rdc::DesignerHook::EndDesign(hooker);
+        hooker=NULL;
+    }
 }
 //---------------------------------------------------------------------------
 

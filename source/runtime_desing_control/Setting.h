@@ -9,5 +9,14 @@ namespace rdc
     const TColor kGrabHandleColorNormal = clBlack;
 
     static const int kGrabHandleSize=4;
+
+    static const int kMoveUpStepByKey=4;
+    static const int kMoveDownStepByKey=4;
+    static const int kMoveLeftStepByKey=4;
+    static const int kMoveRightStepByKey=4;
+
+    
+    static const int kHeightStepByKey=4;
+    static const int kWidthStepByKey=4;
 }//namespace
 #endif
